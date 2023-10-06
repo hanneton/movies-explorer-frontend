@@ -1,0 +1,30 @@
+.cardlist {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min-content, 360px));
+    grid-template-rows: auto;
+    justify-content: center;
+    justify-items: center;
+    gap: 57px 30px;
+}
+
+.content__cardlist {
+    margin: 80px auto 0;
+}
+
+@media screen and (max-width: 900px) {
+    .cardlist {
+        grid-template-columns: repeat(auto-fit, minmax(min-content, 339px));
+        gap: 45px 30px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .content__cardlist {
+        margin: 50px auto 0;
+    }
+
+    .cardlist {
+        grid-template-columns: repeat(auto-fit, minmax(min-content, 300px));
+        gap: 36px 30px;
+    }
+}

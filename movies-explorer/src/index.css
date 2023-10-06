@@ -1,0 +1,11 @@
+@import url('./vendor/font.css');
+
+body {
+  background-color: #202020;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

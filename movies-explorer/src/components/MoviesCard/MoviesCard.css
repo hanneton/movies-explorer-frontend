@@ -1,0 +1,118 @@
+.card {
+    width: 100%;
+    position: relative;
+    margin: 0;
+    order: -1;
+}
+
+.card__pic {
+    height: 201px;
+    width: 100%;
+    display: block;
+    border-radius: 6px;
+}
+
+.card__caption {
+    display: flex;
+    justify-content: space-between;
+    align-items: top;
+    margin: 14px 14px 0;
+    flex-wrap: nowrap;
+}
+
+.card__duration {
+    box-sizing: border-box;
+    margin: 0;
+    max-width: 52px;
+    width: 100%;
+    height: 18px;
+    text-align: center;
+    padding: 3px 0;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 10px;
+    border-radius: 3px;
+    color: #8B8B8B;
+    background-color: #2F2F2F;
+}
+
+.card__title {
+    max-width: 250px;
+    width: 100%;
+    overflow-wrap: break-word;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin: 0;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 15.73px;
+}
+
+.card__save-btn {
+    display: none;
+}
+
+.card:first-child>.card__save-btn {
+    display: block;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background-color: #313131;
+    padding: 6px 7px;
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 9px;
+    border: 0;
+    border-radius: 30px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.card__saved-label {
+    display: none;
+}
+
+.card:nth-child(2)>.card__saved-label {
+    display: block;
+    width: 21px;
+    height: 21px;
+    background-color: #EE3465;
+    background-image: url(../../images/tick.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 8px 4.5px;
+    border-radius: 50%;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+}
+
+@media screen and (max-width: 900px) {
+    .card {
+        max-width: 339px;
+    }
+
+    .card__pic {
+        height: 190px;
+    }
+
+    .card__caption {
+        margin: 25px 0 0;
+    }
+}
+
+@media screen and (max-width:600px) {
+    .card__pic {
+        height: 168px;
+    }
+
+    .card__caption {
+        margin: 16px 0 0;
+    }
+
+    .card__title {
+        font-size: 12px;
+        line-height: 14.52px;
+    }
+}

@@ -1,0 +1,194 @@
+.content__about {
+    margin: 110px 70px 0;
+}
+
+.about__container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 110px;
+}
+
+.about__text {
+    margin: 0;
+    max-width: 550px;
+    width: 100%;
+}
+
+.about__heading {
+    margin-bottom: 70px;
+}
+
+.about__subheading {
+    margin: 0 0 26px;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24.2px;
+    letter-spacing: -0.75px;
+}
+
+.about__paragraph {
+    margin: 0;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.about-progress-bar {
+    display: flex;
+    align-items: center;
+    height: 36px;
+    background-color: #303030;
+    margin: 0;
+}
+
+.about-progress-bar__frontend-label {
+    flex-grow: 1;
+    font-size: 14px;
+    line-height: 36px;
+    text-align: center;
+    margin: 0;
+    height: 100%;
+}
+
+.about-progress-bar__backend-label {
+    flex-basis: 20%;
+    color: #000;
+    margin: 0;
+    font-size: 14px;
+    line-height: 36px;
+    text-align: center;
+    background-color: #3DDC84;
+    height: 100%;
+}
+
+.about-progress-captions {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.about-progress-bar__backend-caption {
+    flex-basis: 20%;
+    margin: 0;
+    text-align: center;
+    color: #8B8B8B;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.about-progress-bar__frontend-caption {
+    flex-grow: 1;
+    margin: 0;
+    text-align: center;
+    color: #8B8B8B;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.about__about-progress-bar {
+    margin-bottom: 14px;
+}
+
+.about__about-progress-captions {
+    margin-bottom: 110px;
+}
+
+@media screen and (max-width: 768px) {
+    .content__about {
+        margin: 90px 50px 0;
+    }
+
+    .about__container {
+        margin-bottom: 93px;
+    }
+
+    .about__text {
+        max-width: 319px;
+    }
+
+    .about__subheading {
+        margin: 0 0 22px;
+    }
+
+    .about__paragraph {
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+    .about-progress-bar__backend-label {
+        flex-basis: 21%;
+    }
+
+    .about-progress-bar__backend-caption {
+        flex-basis: 21%;
+    }
+
+    .about__about-progress-captions {
+        margin-bottom: 90px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .content__about {
+        margin: 70px 18px 0;
+    }
+
+    .about__heading {
+        margin-bottom: 60px;
+    }
+
+    .about__container {
+        margin-bottom: 60px;
+        flex-direction: column;
+    }
+
+    .about__subheading {
+        font-size: 18px;
+        line-height: 21.78px;
+        margin: 0 0 16px;
+
+    }
+
+    .about__text:first-child {
+        margin-bottom: 56px;
+    }
+
+    .about__paragraph {
+        margin: 0;
+        font-size: 11px;
+        line-height: 16px;
+    }
+
+    .about-progress-bar {
+        height: 35px;
+    }
+
+    .about-progress-bar__backend-label {
+        flex-basis: 35%;
+        font-size: 11px;
+        line-height: 35px;
+    }
+
+    .about-progress-bar__frontend-label {
+        font-size: 11px;
+        line-height: 35px;
+    }
+
+    .about-progress-bar__backend-caption {
+        flex-basis: 35%;
+        font-weight: 400;
+        font-size: 11px;
+        line-height: 13.31px;
+    }
+
+    .about-progress-bar__frontend-caption {
+        font-weight: 400;
+        font-size: 11px;
+        line-height: 13.31px;
+    }
+
+    .about__about-progress-captions {
+        margin-bottom: 49px;
+    }
+}
