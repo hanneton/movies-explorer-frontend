@@ -9,6 +9,10 @@
     border-radius: 10px;
 }
 
+.promo a:hover {
+    opacity: 70%;
+}
+
 .promo__heading {
     box-sizing: border-box;
     margin: 0 auto;
@@ -24,12 +28,19 @@
 
 .promo__links {
     display: flex;
+    list-style: none;
+    padding: 0 0 30px 0;
+    margin: 0;
+    gap: 10px;
     justify-content: center;
-    padding-bottom: 30px;
+}
+
+.promo__item {
+    max-width: 96px;
+    width: 100%;
 }
 
 .promo__link {
-    max-width: 96px;
     width: 100%;
     text-align: center;
     display: inline-block;
@@ -41,10 +52,6 @@
     background-color: #303030;
     border-radius: 10px;
     color: #fff;
-}
-
-.promo__link:not(:last-of-type) {
-    margin-right: 10px;
 }
 
 @media screen and (max-width: 768px) {
@@ -63,24 +70,25 @@
 }
 
 @media screen and (max-width: 600px) {
-
-
     .promo__heading {
         padding: 220px 0 212px;
         font-size: 29px;
         line-height: 37px;
     }
 
-    .promo__link:not(:last-of-type) {
-        margin-right: 6px;
+    .promo__links {
+        gap: 6px;
     }
 
     .promo__links {
         padding-bottom: 17px;
     }
 
-    .promo__link {
+    .promo__item {
         max-width: 82px;
+    }
+
+    .promo__link {
         font-size: 10px;
         padding: 5px 0;
     }

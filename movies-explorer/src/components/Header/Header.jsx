@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 function Header() {
     const location = useLocation();
     const [windowWidth, setWindowWidth] = useState(0);
+    const [isPopupOpen, setPopupState] = useState(false);
     let resizeWindow = () => {
         setWindowWidth(window.innerWidth);
     };
@@ -26,15 +27,19 @@ function Header() {
                 {
                     location.pathname === '/'
                         ? (
-                            <div className='header__user-creds'>
-                                <a className='header__link-signup' href='./signup'>Регистрация</a>
-                                <a className='header__link-signin' href='./signin'>Войти</a>
-                            </div>
+                            <ul className='header__user-creds'>
+                                <li>
+                                    <a className='header__link-signup' href='./signup'>Регистрация</a>
+                                </li>
+                                <li>
+                                    <a className='header__link-signin' href='./signin'>Войти</a>
+                                </li>
+                            </ul>
 
                         )
                         : windowWidth <= 768
                             ? (
-                                <button className='burger'>
+                                <button onClick={() => setPopupState(true)} className='burger'>
                                     <div className='burger__line'></div>
                                     <div className='burger__line'></div>
                                     <div className='burger__line'></div>
@@ -42,27 +47,31 @@ function Header() {
                             )
                             : (
                                 <>
-                                    <div className='header__films'>
-                                        <a className='header__link-films' href="./movies">Фильмы</a>
-                                        <a className='header__link-saved-films' href="./saved-movies">Сохранённые фильмы</a>
-                                    </div>
+                                    <ul className='header__films'>
+                                        <li>
+                                            <a className='header__link-films' href="./movies">Фильмы</a>
+                                        </li>
+                                        <li>
+                                            <a className='header__link-films header__link-films_active' href="./saved-movies">Сохранённые фильмы</a>
+                                        </li>
+                                    </ul>
                                     <a className='header__link-account' href='./profile'>Аккаунт</a>
                                 </>
                             )
                 }
             </header>
-            <div className='popup'>
+            <div className={`popup ${isPopupOpen && 'popup_active'}`}>
                 <div className='popup__container'>
-                    <button className="popup__close-btn"></button>
+                    <button className="popup__close-btn" onClick={() => setPopupState(false)}></button>
                     <ul className='popup__links'>
                         <li>
-                            <a className='popup__link' href="#">Главная</a>
+                            <a className='popup__link' href="./">Главная</a>
                         </li>
                         <li>
-                            <a className='popup__link popup__link_active' href="#">Фильмы</a>
+                            <a className='popup__link popup__link_active' href="./movies">Фильмы</a>
                         </li>
                         <li>
-                            <a className='popup__link' href="#">Сохраненные фильмы</a>
+                            <a className='popup__link' href="./saved-movies">Сохраненные фильмы</a>
                         </li>
                     </ul>
                     <button className='profile-btn'>Аккаунт</button>

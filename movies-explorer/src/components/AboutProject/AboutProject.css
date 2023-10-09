@@ -1,5 +1,5 @@
 .content__about {
-    margin: 110px 70px 0;
+    margin: 110px 70px 100px;
 }
 
 .about__container {
@@ -33,70 +33,43 @@
 }
 
 .about-progress-bar {
-    display: flex;
-    align-items: center;
-    height: 36px;
+    display: grid;
+    grid-template-columns: 20% 80%;
+    grid-template-rows: repeat(2, 36px);
+    row-gap: 5px;
+    justify-items: center;
+}
+
+.about-progress-bar__label {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 36px;
     background-color: #303030;
-    margin: 0;
 }
 
-.about-progress-bar__frontend-label {
-    flex-grow: 1;
-    font-size: 14px;
-    line-height: 36px;
-    text-align: center;
-    margin: 0;
-    height: 100%;
-}
-
-.about-progress-bar__backend-label {
-    flex-basis: 20%;
-    color: #000;
-    margin: 0;
-    font-size: 14px;
-    line-height: 36px;
-    text-align: center;
+.about-progress-bar__label:first-child {
     background-color: #3DDC84;
+    color: #000;
+}
+
+.about-progress-bar__caption {
     height: 100%;
-}
-
-.about-progress-captions {
-    display: flex;
-    align-items: center;
     margin: 0;
-}
-
-.about-progress-bar__backend-caption {
-    flex-basis: 20%;
-    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 36px;
+    letter-spacing: 0px;
     text-align: center;
     color: #8B8B8B;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 17px;
-}
-
-.about-progress-bar__frontend-caption {
-    flex-grow: 1;
-    margin: 0;
-    text-align: center;
-    color: #8B8B8B;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 17px;
-}
-
-.about__about-progress-bar {
-    margin-bottom: 14px;
-}
-
-.about__about-progress-captions {
-    margin-bottom: 110px;
 }
 
 @media screen and (max-width: 768px) {
     .content__about {
-        margin: 90px 50px 0;
+        margin: 90px 50px 80px;
     }
 
     .about__container {
@@ -116,22 +89,14 @@
         line-height: 18px;
     }
 
-    .about-progress-bar__backend-label {
-        flex-basis: 21%;
-    }
-
-    .about-progress-bar__backend-caption {
-        flex-basis: 21%;
-    }
-
-    .about__about-progress-captions {
-        margin-bottom: 90px;
+    .about-progress-bar {
+        grid-template-columns: 21% 79%;
     }
 }
 
 @media screen and (max-width: 600px) {
     .content__about {
-        margin: 70px 18px 0;
+        margin: 70px 18px 40px;
     }
 
     .about__heading {
@@ -161,34 +126,18 @@
     }
 
     .about-progress-bar {
-        height: 35px;
+        grid-template-columns: 35% 65%;
+        grid-template-rows: repeat(2, 35px);
+        row-gap: 2.5px;
     }
 
-    .about-progress-bar__backend-label {
-        flex-basis: 35%;
+    .about-progress-bar__label {
         font-size: 11px;
-        line-height: 35px;
+        line-height: 36px;
     }
 
-    .about-progress-bar__frontend-label {
+    .about-progress-bar__caption {
         font-size: 11px;
-        line-height: 35px;
-    }
-
-    .about-progress-bar__backend-caption {
-        flex-basis: 35%;
-        font-weight: 400;
-        font-size: 11px;
-        line-height: 13.31px;
-    }
-
-    .about-progress-bar__frontend-caption {
-        font-weight: 400;
-        font-size: 11px;
-        line-height: 13.31px;
-    }
-
-    .about__about-progress-captions {
-        margin-bottom: 49px;
+        line-height: 36px;
     }
 }

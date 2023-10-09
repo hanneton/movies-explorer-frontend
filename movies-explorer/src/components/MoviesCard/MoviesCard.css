@@ -48,33 +48,37 @@
     line-height: 15.73px;
 }
 
-.card__save-btn {
-    display: none;
-}
-
-.card:first-child>.card__save-btn {
+.card__btn {
     display: block;
     position: absolute;
     top: 14px;
     right: 14px;
-    background-color: #313131;
-    padding: 6px 7px;
-    font-family: 'Inter';
-    font-weight: 400;
-    font-size: 10px;
-    line-height: 9px;
     border: 0;
-    border-radius: 30px;
-    color: #fff;
     cursor: pointer;
 }
 
-.card__saved-label {
-    display: none;
+.card__btn:hover {
+    opacity: 70%;
 }
 
-.card:nth-child(2)>.card__saved-label {
-    display: block;
+.card__btn_type_save {
+    max-width: 72px;
+    width: 100%;
+    background-color: #313131;
+    padding: 6px 7px;
+    font-family: "Inter", "Arial", sans-serif;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 9px;
+    border-radius: 30px;
+    color: #fff;
+}
+
+.card__btn_type_save:after {
+    content: 'Сохранить'
+}
+
+.card__btn_type_checked {
     width: 21px;
     height: 21px;
     background-color: #EE3465;
@@ -83,10 +87,19 @@
     background-repeat: no-repeat;
     background-size: 8px 4.5px;
     border-radius: 50%;
-    position: absolute;
-    top: 14px;
-    right: 14px;
 }
+
+.card__btn_type_delete {
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    background-color: #313131;
+    background-image: url(../../images/btn-close.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.card:nth-child(2)>.card__saved-label {}
 
 @media screen and (max-width: 900px) {
     .card {

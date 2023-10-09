@@ -15,7 +15,7 @@ function AboutMe() {
                         С&nbsp;2015 года работал в компании «СКБ Контур». После того, как прошёл курс по веб-разработке, начал заниматься фриланс-заказами и ушёл с постоянной работы.</p>
                     <a href="https://github.com/hanneton" target='blank' className='about-me__github-link'>Github</a>
                 </div>
-                <img className='about-me__personal-photo' src={personalPhoto} />
+                <img className='about-me__personal-photo' src={personalPhoto} alt="Фотография автора" />
             </div>
             <Portfolio />
         </section>

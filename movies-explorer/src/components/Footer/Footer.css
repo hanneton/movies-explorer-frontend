@@ -2,6 +2,10 @@
     margin: 0 70px;
 }
 
+.footer a:hover {
+    opacity: 70%;
+}
+
 .footer__container {
     display: flex;
     justify-content: space-between;

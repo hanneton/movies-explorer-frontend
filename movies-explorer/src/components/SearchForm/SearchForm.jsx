@@ -9,10 +9,10 @@ function SearchForm() {
             </form>
             <div className='movies-req__container'>
                 <label className="movies-req__switch">
-                    <input type='checkbox' className="movies-req__checkbox" />
+                    <input id='movies-req__form' type='checkbox' className="movies-req__checkbox" />
                     <span className="movies-req__slider"></span>
                 </label>
-                <p className='movies-req__caption'>Короткометражки</p>
+                <label for="movies-req__form" className='movies-req__caption'>Короткометражки</label>
             </div>
         </section >
     )

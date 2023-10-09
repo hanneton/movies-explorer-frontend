@@ -8,10 +8,10 @@ function SavedMovies() {
     return (
         <>
             <Header />
-            <div className="saved-movies page__saved-movies">
+            <main className="saved-movies page__saved-movies">
                 <SearchForm />
                 <MoviesCardList />
-            </div>
+            </main>
             <Footer />
         </>
     )

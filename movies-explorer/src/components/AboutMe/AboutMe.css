@@ -1,5 +1,9 @@
 .content__about-me {
-    margin: 110px 70px 185px;
+    margin: 110px 70px 204px;
+}
+
+.about-me a:hover {
+    opacity: 70%;
 }
 
 .about-me__container {
@@ -52,7 +56,7 @@
 
 @media screen and (max-width: 768px) {
     .content__about-me {
-        margin: 90px 50px 150px;
+        margin: 90px 50px 170px;
     }
 
     .about-me__name {
@@ -85,7 +89,7 @@
 
 @media screen and (max-width: 600px) {
     .content__about-me {
-        margin: 70px 14px 129px;
+        margin: 70px 14px 149px;
     }
 
     .about-me__container {

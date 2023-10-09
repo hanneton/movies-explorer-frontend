@@ -23,13 +23,25 @@
     align-items: center;
 }
 
+.header a:hover {
+    opacity: 70%;
+}
+
+.header__user-creds {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+
 .header__link-signup {
     text-decoration: none;
     color: #fff;
     font-size: 12px;
     font-weight: 500;
     line-height: 16px;
-    margin-right: 30px;
 }
 
 .header__link-signin {
@@ -54,29 +66,25 @@
 }
 
 .header__films {
-    margin-left: 58px;
-}
-
-.header__films>a:first-child {
-    margin-right: 16px;
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0 58px;
+    gap: 16px;
 }
 
 .header__link-films {
     text-decoration: none;
     color: #fff;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 18px;
     letter-spacing: 0em;
     text-align: right;
 }
 
-.header__link-saved-films {
-    text-decoration: none;
-    color: #fff;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 18px;
+.header__link-films_active {
+    font-weight: 500;
 }
 
 .page__header {
@@ -99,9 +107,12 @@
         height: 2.5px;
     }
 
+    .header__user-creds {
+        gap: 14px;
+    }
+
     .header__link-signup {
         font-size: 10px;
-        margin-right: 16px;
     }
 
     .header__link-signin {
@@ -109,7 +120,7 @@
         padding: 5px 12px;
     }
 
-    .header__link:not(:last-child) {
-        margin-right: 14px;
+    .header__films {
+        gap: 14px;
     }
 }
