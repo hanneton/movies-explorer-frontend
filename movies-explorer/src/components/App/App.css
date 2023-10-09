@@ -147,6 +147,20 @@
   display: block;
 }
 
+.profile-btn {
+  display: inline-block;
+  font-size: 14px;
+  background-color: #313131;
+  border: 0;
+  border-radius: 20px;
+  padding: 8px 20px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  line-height: 16px;
+  margin: auto auto 0;
+}
+
 @media screen and (max-width: 768px) {
   .popup__container {
     box-sizing: border-box;
@@ -182,21 +196,6 @@
 
   .popup__link_active {
     border-bottom: 2px solid #fff;
-  }
-
-  .profile-btn {
-    display: inline-block;
-    width: 100px;
-    font-size: 14px;
-    background-color: #313131;
-    border: 0;
-    border-radius: 20px;
-    padding: 8px 20px;
-    text-decoration: none;
-    color: #fff;
-    font-weight: 500;
-    line-height: 16px;
-    margin: auto auto 0;
   }
 
   .popup__close-btn {
@@ -243,9 +242,10 @@
   }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 600px) {
   .page__auth {
-    margin: 56px 30px;
+    width: calc(100% - 60px);
+    margin: 56px auto;
   }
 
   .auth {

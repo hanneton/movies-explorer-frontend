@@ -74,7 +74,7 @@ function Header() {
                             <a className='popup__link' href="./saved-movies">Сохраненные фильмы</a>
                         </li>
                     </ul>
-                    <button className='profile-btn'>Аккаунт</button>
+                    <a className='profile-btn' href="./profile">Аккаунт</a>
                 </div>
             </div>
         </>
