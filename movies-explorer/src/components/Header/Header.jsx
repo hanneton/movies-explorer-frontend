@@ -1,43 +1,37 @@
 import './Header.css'
 import logo from '../../images/logo.svg'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react';
+import { useContext } from 'react';
+import { CurrentWidth } from '../../contexts/CurrentWidth';
 
 
-function Header() {
+function Header(props) {
     const location = useLocation();
-    const [windowWidth, setWindowWidth] = useState(0);
+    const currentWidth = useContext(CurrentWidth);
     const [isPopupOpen, setPopupState] = useState(false);
-    let resizeWindow = () => {
-        setWindowWidth(window.innerWidth);
-    };
 
-    useEffect(() => {
-        resizeWindow();
-        window.addEventListener("resize", resizeWindow);
-        return () => window.removeEventListener("resize", resizeWindow);
-    }, []);
 
     return (
         <>
             <header className='header page__header'>
-                <a href='./'>
+                <Link to='/'>
                     <img className='logo' alt='Логотип' src={logo} />
-                </a>
+                </Link>
                 {
-                    location.pathname === '/'
+                    !props.isLoggedIn
                         ? (
                             <ul className='header__user-creds'>
                                 <li>
-                                    <a className='header__link-signup' href='./signup'>Регистрация</a>
+                                    <Link to="/signup" className='header__link-signup'>Регистрация</Link>
                                 </li>
                                 <li>
-                                    <a className='header__link-signin' href='./signin'>Войти</a>
+                                    <Link to="/signin" className='header__link-signin'>Войти</Link>
                                 </li>
                             </ul>
 
                         )
-                        : windowWidth <= 768
+                        : currentWidth <= 768
                             ? (
                                 <button onClick={() => setPopupState(true)} className='burger'>
                                     <div className='burger__line'></div>
@@ -49,13 +43,13 @@ function Header() {
                                 <>
                                     <ul className='header__films'>
                                         <li>
-                                            <a className='header__link-films' href="./movies">Фильмы</a>
+                                            <Link to="/movies" className='header__link-films'>Фильмы</Link>
                                         </li>
                                         <li>
-                                            <a className='header__link-films header__link-films_active' href="./saved-movies">Сохранённые фильмы</a>
+                                            <Link to="/saved-movies" className='header__link-films header__link-films_active'>Сохранённые фильмы</Link>
                                         </li>
                                     </ul>
-                                    <a className='header__link-account' href='./profile'>Аккаунт</a>
+                                    <Link to="/profile" className='header__link-account'>Аккаунт</Link>
                                 </>
                             )
                 }
@@ -65,16 +59,16 @@ function Header() {
                     <button className="popup__close-btn" onClick={() => setPopupState(false)}></button>
                     <ul className='popup__links'>
                         <li>
-                            <a className='popup__link' href="./">Главная</a>
+                            <Link to="/" className='popup__link'>Главная</Link>
                         </li>
                         <li>
-                            <a className='popup__link popup__link_active' href="./movies">Фильмы</a>
+                            <Link to="/movies" className='popup__link popup__link_active'>Фильмы</Link>
                         </li>
                         <li>
-                            <a className='popup__link' href="./saved-movies">Сохраненные фильмы</a>
+                            <Link to="/saved-movies" className='popup__link'>Сохраненные фильмы</Link>
                         </li>
                     </ul>
-                    <a className='profile-btn' href="./profile">Аккаунт</a>
+                    <Link to="/profile" className='profile-btn'>Аккаунт</Link>
                 </div>
             </div>
         </>

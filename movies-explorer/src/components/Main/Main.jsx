@@ -8,10 +8,10 @@ import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
 
 
-function Main() {
+function Main(props) {
     return (
         <>
-            <Header />
+            <Header isLoggedIn={props.isLoggedIn} />
             <main className='content'>
                 <Promo />
                 <NavTab />

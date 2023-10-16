@@ -3,6 +3,11 @@
     margin: 80px auto 160px;
 }
 
+.movies__result {
+    text-align: center;
+    margin: 80px auto;
+}
+
 .movies__btn {
     display: block;
     margin: 76px auto 0;

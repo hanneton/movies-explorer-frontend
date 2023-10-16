@@ -1,18 +1,22 @@
 import './MoviesCard.css';
-import fallback from '../../images/default-fallback-pic.jpg'
+import { beatFilmsUrl } from '../../utils/MoviesApi'
+import { useLocation } from 'react-router-dom';
 
 
-function MoviesCard() {
+function MoviesCard(props) {
+    const location = useLocation();
+
     return (
         <figure className='card'>
-            <img className='card__pic' src={fallback} alt="Скриншот из фильма" />
+            <img className='card__pic' src={beatFilmsUrl + props.film.image.url} alt="Скриншот из фильма" />
             <figcaption className='card__caption'>
-                <h2 className='card__title'>Игги и The Stooges</h2>
-                <p className='card__duration'>1ч 17м</p>
+                <h2 className='card__title'>{props.film.nameRU}</h2>
+                <p className='card__duration'>
+                    {`${Math.floor(props.film.duration / 60)}ч ${props.film.duration % 60}м`}
+                </p>
             </figcaption>
-            <button className='card__btn card__btn_type_delete' type='button'></button>
-            <div className='card__saved-label'></div>
-        </figure>
+            <button onClick={() => props.handleSaveFilm(props.film)} className='card__btn card__btn_type_save' type='button'></button>
+        </figure >
     )
 }
 

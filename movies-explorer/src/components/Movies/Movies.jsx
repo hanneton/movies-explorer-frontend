@@ -5,15 +5,34 @@ import './Movies.css'
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
-function Movies() {
+function Movies(props) {
     return (
         <>
             <Header />
             <main className="movies page__movies">
-                <SearchForm />
-                <Preloader />
-                <MoviesCardList />
-                <button className='movies__btn' type='button'>Ещё</button>
+                <SearchForm
+                    onRequest={props.onRequest}
+                    isShort={props.isShort}
+                />
+                {props.isLoading
+                    ? <Preloader />
+                    : props.requestedFilms.length !== 0
+                        ? (
+                            <MoviesCardList
+                                handleSaveFilm={props.handleSaveFilm}
+                                requestedFilms={props.requestedFilms}
+                            />
+                        )
+                        : (
+                            <p className="movies__result">
+                                {
+                                    `${props.apiStatus
+                                        ? "Ничего не найдено"
+                                        : "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"}`
+                                }
+                            </p>
+                        )
+                }
             </main>
             <Footer />
         </>

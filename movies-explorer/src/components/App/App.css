@@ -48,23 +48,33 @@
   color: #EE3465;
 }
 
-.auth-error {
+.auth-inform-message {
   display: block;
-  visibility: hidden;
-  color: #EE3465;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 400;
   line-height: 12px;
-  height: 12px;
+  margin-bottom: 5px;
+  color: #EE3465;
+  height: 24px;
 }
 
-.auth-error_active {
-  visibility: visible;
+.auth-inform-message_positive {
+  color: #3DDC84;
 }
+
+/* .auth-inform-message_type_sucesss {
+  visibility: visible;
+  color: #3DDC84;
+}
+
+.auth-inform-message_type_fail {
+  visibility: visible;
+  color: #EE3465;
+} */
 
 .auth-label {
   display: block;
-  margin: 0 auto 20px;
+  margin: 0 auto 5px;
   font-family: "Inter", "Arial", sans-serif;
   font-weight: 400;
   font-size: 10px;
@@ -108,7 +118,12 @@
   cursor: pointer;
 }
 
-.auth-btn:hover {
+.auth-btn:disabled {
+  background-color: #8B8B8B;
+  cursor: default;
+}
+
+.auth-btn:active:hover {
   opacity: 80%;
 }
 
