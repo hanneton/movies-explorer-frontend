@@ -3,6 +3,7 @@ import logo from '../../images/logo.svg'
 import useFormWithValidation from '../hooks/useFormWithValidation';
 import isEmail from 'validator/lib/isEmail';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Register(props) {
     const {
@@ -97,7 +98,7 @@ function Register(props) {
                 </span>
             </form>
             <button form="auth-form-signup" className='auth-btn' disabled={isValid ? null : true}>Зарегистрироваться</button>
-            <p className='auth-caption'>Уже зарегистрированы?<a className='auth-link' href='./signin'> Войти</a></p>
+            <p className='auth-caption'>Уже зарегистрированы?<Link className='auth-link' to='/signin'> Войти</Link></p>
         </main>
     )
 }

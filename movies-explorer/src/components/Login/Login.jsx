@@ -3,6 +3,7 @@ import logo from '../../images/logo.svg'
 import useFormWithValidation from '../hooks/useFormWithValidation';
 import isEmail from 'validator/lib/isEmail';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Login(props) {
     const {
@@ -84,7 +85,7 @@ function Login(props) {
                 </span>
             </form>
             <button form="auth-form-signin" className='auth-btn' disabled={isValid ? null : true}>Войти</button>
-            <p className='auth-caption'>Ещё не зарегистрированы?<a className='auth-link' href='./signup'> Регистрация</a></p>
+            <p className='auth-caption'>Ещё не зарегистрированы?<Link className='auth-link' to='/signup'> Регистрация</Link></p>
         </main>
     )
 }
