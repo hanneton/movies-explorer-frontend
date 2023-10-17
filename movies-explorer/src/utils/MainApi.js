@@ -1,4 +1,5 @@
 const savedDataUrl = 'https://api.beatexplorer.nomoredomainsicu.ru';
+
 class SavedDataApi {
     constructor(url) {
         this.url = url;
@@ -14,7 +15,10 @@ class SavedDataApi {
     getSavedFilms() {
         return fetch(`${this.url}/movies`, {
             method: "GET",
-            headers: {}
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('jwt')}`
+            }
         })
             .then(this._checkResponse);
     }
@@ -84,6 +88,17 @@ class SavedDataApi {
             .then(this._checkResponse);
     }
 
+    unsaveFilm(id) {
+        return fetch(`${this.url}/movies/${id}`, {
+            method: 'DELETE',
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('jwt')}`
+            }
+        })
+            .then(this._checkResponse);
+    }
+
     saveFilm({
         country,
         director,
@@ -92,11 +107,24 @@ class SavedDataApi {
         description,
         image,
         trailerLink,
-        id,
+        movieId,
         nameRU,
         nameEN,
+        thumbnail
     }) {
-
+        console.log({
+            country,
+            director,
+            duration,
+            year,
+            description,
+            image,
+            trailerLink,
+            movieId,
+            nameRU,
+            nameEN,
+            thumbnail
+        })
         return fetch(`${this.url}/movies`, {
             method: 'POST',
             headers: {
@@ -109,16 +137,17 @@ class SavedDataApi {
                 duration,
                 year,
                 description,
-                image: savedDataUrl + image.url,
+                image,
                 trailerLink,
-                thumbnail: savedDataUrl + image.formats.thumbnail.url,
-                movieId: id,
+                thumbnail,
+                movieId,
                 nameRU,
                 nameEN,
             })
         })
             .then(this._checkResponse);
     }
+
 
 }
 

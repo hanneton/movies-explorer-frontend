@@ -1,33 +1,44 @@
 import './Register.css'
 import logo from '../../images/logo.svg'
 import useFormWithValidation from '../hooks/useFormWithValidation';
+import isEmail from 'validator/lib/isEmail';
+import { useState } from 'react';
 
 function Register(props) {
     const {
         values,
-        setValues,
         errors,
-        setErrors,
         isValid,
-        setIsValid,
         handleChange
     } = useFormWithValidation({
         initialValues: {
-            email: '',
             password: '',
             name: ''
         },
         initialErrors: {
-            email: '',
             password: '',
             name: ''
         },
         initialIsValid: false,
     })
 
+    const [email, setEmail] = useState('')
+    const [emailError, setEmailError] = useState('')
+
+    const handleEmailChange = (event) => {
+        const value = event.target.value;
+        setEmail(value);
+        if (!isEmail(value)) {
+            setEmailError("Некорректный email");
+        } else {
+            setEmailError("");
+        }
+    }
+
+
     function onSubmit(e) {
         e.preventDefault();
-        props.handleSignUp(values);
+        props.handleSignUp({ ...values, email });
     }
 
     return (
@@ -59,14 +70,14 @@ function Register(props) {
                 <label className='auth-label'>
                     E-mail
                     <input className='auth-input auth-input-email'
-                        onChange={handleChange}
-                        type="email"
+                        onChange={handleEmailChange}
+                        type="text"
                         placeholder='pochta@yandex.ru'
                         required
                         name='email'
                     />
                 </label>
-                <span className='auth-inform-message'>{errors.email}</span>
+                <span className='auth-inform-message'>{emailError}</span>
                 <label className='auth-label'>
                     Пароль
                     <input className='auth-input auth-input-password'
@@ -78,11 +89,11 @@ function Register(props) {
                     />
                 </label>
                 <span className={`auth-inform-message ${props.isSuccess && 'auth-inform-message_positive'}`}>
-                    {props.isSuccess === null
-                        ? errors.password
+                    {((errors.password) || (props.isSuccess === null
+                        ? ''
                         : props.isSuccess
                             ? 'Вы успешно зарегистрировались'
-                            : 'Что-то пошло не так'}
+                            : 'Что-то пошло не так'))}
                 </span>
             </form>
             <button form="auth-form-signup" className='auth-btn' disabled={isValid ? null : true}>Зарегистрироваться</button>
@@ -94,16 +105,3 @@ function Register(props) {
 export default Register;
 
 
-
-{/* {`auth-error ${!formRef.current.checkValidity() ? 'auth-error_active' : ''}`} */ }
-
-// {props.isSuccess
-//     ? { color: '#3DDC84' }
-//     : { color: '#EE3465' }}
-
-{/* <span
-                    className={`auth-inform-message ${props.isSuccess !== null && "auth-inform-message_active"}`}>
-                    {props.isSuccess
-                        ? 'Вы успешно зарегистрировались'
-                        : 'Что-то пошло не так'}
-                </span> */}

@@ -11,7 +11,9 @@
     border-radius: 6px;
 }
 
-
+.card__link {
+    text-decoration: none;
+}
 
 .card__caption {
     display: flex;

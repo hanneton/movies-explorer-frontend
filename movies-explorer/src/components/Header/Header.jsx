@@ -10,8 +10,9 @@ function Header(props) {
     const location = useLocation();
     const currentWidth = useContext(CurrentWidth);
     const [isPopupOpen, setPopupState] = useState(false);
-
-
+    function isCurrentPage(e) {
+        console.log(e.target)
+    }
     return (
         <>
             <header className='header page__header'>
@@ -43,10 +44,10 @@ function Header(props) {
                                 <>
                                     <ul className='header__films'>
                                         <li>
-                                            <Link to="/movies" className='header__link-films'>Фильмы</Link>
+                                            <Link to="/movies" className={`header__link-films ${location.pathname === '/movies' && 'header__link-films_active'}`}>Фильмы</Link>
                                         </li>
                                         <li>
-                                            <Link to="/saved-movies" className='header__link-films header__link-films_active'>Сохранённые фильмы</Link>
+                                            <Link to="/saved-movies" className={`header__link-films ${location.pathname === '/saved-movies' && 'header__link-films_active'}`}>Сохранённые фильмы</Link>
                                         </li>
                                     </ul>
                                     <Link to="/profile" className='header__link-account'>Аккаунт</Link>
@@ -59,13 +60,25 @@ function Header(props) {
                     <button className="popup__close-btn" onClick={() => setPopupState(false)}></button>
                     <ul className='popup__links'>
                         <li>
-                            <Link to="/" className='popup__link'>Главная</Link>
+                            <Link
+                                to="/"
+                                className={`popup__link ${location.pathname === '/' && 'popup__link_active'}`}>
+                                Главная
+                            </Link>
                         </li>
                         <li>
-                            <Link to="/movies" className='popup__link popup__link_active'>Фильмы</Link>
+                            <Link
+                                to="/movies"
+                                className={`popup__link ${location.pathname === '/movies' && 'popup__link_active'}`}>
+                                Фильмы
+                            </Link>
                         </li>
                         <li>
-                            <Link to="/saved-movies" className='popup__link'>Сохраненные фильмы</Link>
+                            <Link
+                                to="/saved-movies"
+                                className={`popup__link ${location.pathname === '/saved-movies' && 'popup__link_active'}`}>
+                                Сохраненные фильмы
+                            </Link>
                         </li>
                     </ul>
                     <Link to="/profile" className='profile-btn'>Аккаунт</Link>

@@ -16,10 +16,25 @@ function MoviesCardList(props) {
                 : [5, 1]
         return { perFirstChunk, perRevealedChunk }
     }
+
+    useEffect(() => {
+        console.log(localStorage.getItem('displayedFilms'))
+        if (localStorage.getItem('displayedFilms') === null) {
+            localStorage.setItem('displayedFilms', JSON.stringify([]));
+        }
+        setDisplayedFilms(JSON.parse(localStorage.getItem('displayedFilms')))
+    }, []);
+
     useEffect(() => {
         let { perFirstChunk } = calcChunkSize();
-        setDisplayedFilms(props.requestedFilms.slice(0, perFirstChunk))
-    }, [currentWidth])
+        let firstChunk = props.requestedFilms.slice(0, perFirstChunk);
+        setDisplayedFilms(firstChunk)
+        localStorage.setItem('displayedFilms', JSON.stringify(firstChunk))
+    }, [])
+
+    // currentWidth, props.requestedFilms
+
+
 
     function handleClick() {
         const revealedCards = props.requestedFilms.slice(displayedFilms.length, displayedFilms.length + calcChunkSize().perRevealedChunk);
@@ -29,9 +44,15 @@ function MoviesCardList(props) {
     return (
         <>
             <section className="cardlist content__cardlist">
-                {displayedFilms.map((film) => <MoviesCard film={film} handleSaveFilm={props.handleSaveFilm} />)}
+                {displayedFilms.map((film, index) => <MoviesCard
+                    key={index}
+                    film={film}
+                    savedFilms={props.savedFilms}
+                    handleSaveFilm={props.handleSaveFilm}
+                />)}
             </section>
-            <button onClick={handleClick} className='movies__btn'>Еще</button>
+            {!(displayedFilms.length === props.requestedFilms.length) && <button onClick={handleClick} className='movies__btn'>Еще</button>}
+
         </>
     )
 }

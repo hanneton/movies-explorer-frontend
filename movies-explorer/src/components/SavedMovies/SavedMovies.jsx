@@ -1,16 +1,27 @@
 import "./SavedMovies.css"
-import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
+import MoviesCard from "../MoviesCard/MoviesCard";
 
-function SavedMovies() {
+
+function SavedMovies(props) {
     return (
         <>
-            <Header />
+            <Header isLoggedIn={props.isLoggedIn} />
             <main className="saved-movies page__saved-movies">
-                <SearchForm />
-                {/* <MoviesCardList /> */}
+                <SearchForm handleSavedFilmsRequest={props.handleSavedFilmsRequest} />
+                <section className="cardlist content__cardlist">
+                    {
+                        props.savedRequestedFilms.map((film, index) =>
+                            <MoviesCard
+                                key={index}
+                                film={film}
+                                savedFilms={props.savedFilms}
+                                handleSaveFilm={props.handleSaveFilm}
+                            />)
+                    }
+                </section>
             </main>
             <Footer />
         </>

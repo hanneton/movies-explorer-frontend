@@ -1,6 +1,8 @@
 import './Login.css'
 import logo from '../../images/logo.svg'
 import useFormWithValidation from '../hooks/useFormWithValidation';
+import isEmail from 'validator/lib/isEmail';
+import { useState } from 'react';
 
 function Login(props) {
     const {
@@ -19,9 +21,23 @@ function Login(props) {
         },
         initialIsValid: false,
     })
+
+    const [email, setEmail] = useState('')
+    const [emailError, setEmailError] = useState('')
+
+    const handleEmailChange = (event) => {
+        const value = event.target.value;
+        setEmail(value);
+        if (!isEmail(value)) {
+            setEmailError("Некорректный email");
+        } else {
+            setEmailError("");
+        }
+    };
+
     function onSubmit(e) {
         e.preventDefault();
-        props.handleSignIn(values);
+        props.handleSignIn({ ...values, email });
     }
 
     return (
@@ -35,19 +51,20 @@ function Login(props) {
                 onSubmit={(e) => onSubmit(e)}
                 name="auth-form-signin"
                 id="auth-form-signin"
+                noValidate
             >
                 <label className='auth-label'>
                     E-mail
                     <input
                         className='auth-input'
-                        type="email"
+                        type="text"
                         placeholder='pochta@yandex.ru'
                         required
                         onChange={handleChange}
                         name="email"
                     />
                 </label>
-                <span className='auth-inform-message'>{errors.email}</span>
+                <span className='auth-inform-message'>{emailError}</span>
                 <label className='auth-label'>
                     Пароль
                     <input className='auth-input'
@@ -59,11 +76,11 @@ function Login(props) {
                     />
                 </label>
                 <span className={`auth-inform-message ${props.isSuccess && 'auth-inform-message_positive'}`}>
-                    {props.isSuccess === null
-                        ? errors.password
+                    {((errors.password) || (props.isSuccess === null
+                        ? ''
                         : props.isSuccess
                             ? 'Вы успешно зарегистрировались'
-                            : 'Что-то пошло не так'}
+                            : 'Что-то пошло не так'))}
                 </span>
             </form>
             <button form="auth-form-signin" className='auth-btn' disabled={isValid ? null : true}>Войти</button>

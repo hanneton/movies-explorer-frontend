@@ -13,19 +13,22 @@ import { useNavigate } from 'react-router-dom'
 import { savedDataApi } from '../../utils/MainApi'
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
 import { CurrentWidth } from '../../contexts/CurrentWidth'
-
+import { beatFilmsUrl } from '../../utils/MoviesApi'
 
 function App() {
   const [films, setFilms] = useState([])
   const [requestedFilms, setRequestedFilms] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [apiStatus, setApiStatus] = useState(true);
   const [savedFilms, setSavedFilms] = useState([]);
+  const [savedRequestedFilms, setSavedRequestedFilms] = useState([]);
   const [isSuccess, setIsSuccess] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false)
   const [currentUser, setCurrentUser] = useState({})
   const [windowWidth, setWindowWidth] = useState(0);
+
+  const navigate = useNavigate();
+
   let resizeWindow = () => {
     setWindowWidth(window.innerWidth);
   };
@@ -36,40 +39,77 @@ function App() {
     return () => window.removeEventListener("resize", resizeWindow);
   }, []);
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    if (isLoggedIn) {
+      savedDataApi.getSavedFilms()
+        .then(savedFilms => {
+          setSavedFilms(savedFilms)
+        })
+        .catch(err => console.log)
+    }
+  }, [isLoggedIn])
+
+  function filterFilmsList(request, films, isChecked) {
+    return films.filter((el) => {
+      return isChecked
+        ? ((el.nameRU.toLowerCase().includes(request.toLowerCase()) || el.nameEN.toLowerCase().includes(request.toLowerCase())) && el.duration < 40)
+        : (el.nameRU.toLowerCase().includes(request.toLowerCase()) || el.nameEN.toLowerCase().includes(request.toLowerCase()))
+    }
+    )
+  }
 
   function handleRequest({ request, isChecked }) {
     setIsLoading(true);
-    moviesApi.getFilms()
-      .then(films => {
-        setFilms(films);
-        return films.filter((el) => {
-          return isChecked
-            ? (el.nameRU.includes(request) && el.duration < 40)
-            : el.nameRU.includes(request)
-        }
-        )
-      })
-      .then(filteredFilms => {
-        setRequestedFilms(filteredFilms);
-        setIsLoading(false);
-      })
-      .catch(err => {
-        setApiStatus(false);
-        console.log(err)
-      })
+    if (films.length === 0) {
+      moviesApi.getFilms()
+        .then(films => {
+          setFilms(films);
+          setRequestedFilms(filterFilmsList(request, films, isChecked))
+          setIsLoading(false)
+          setIsSuccess(true);
+        })
+        .catch(err => {
+          console.log(err)
+          setIsSuccess(false)
+        })
+    }
+    else {
+      setRequestedFilms(filterFilmsList(request, films, isChecked));
+      setIsLoading(false)
+    }
   }
 
-
-  function handleSaveFilm(film) {
-    let modifiedFilmInfo = { ...film, owner: currentUser._id }
-    // console.log(film, currentUser)
-    // const isUnique = !savedFilms.some((el) => el.id === card.id);
-    // if (isUnique) setSavedFilms([...savedFilms, card]);
-    savedDataApi.saveFilm(modifiedFilmInfo)
-      .then(fetchedFilm => console.log(fetchedFilm))
-      .catch(err => console.log)
+  function handleSavedFilmsRequest({ request, isChecked }) {
+    setSavedRequestedFilms(filterFilmsList(request, savedFilms, isChecked))
   }
+
+  function handleSaveFilm(foundFilm, newFilm) {
+    if (!foundFilm) {
+      let modifiedFilm = {
+        ...newFilm,
+        owner: currentUser._id,
+        image: beatFilmsUrl + newFilm.image.url,
+        thumbnail: beatFilmsUrl + newFilm.image.formats.thumbnail.url,
+        movieId: newFilm.id
+      }
+
+      savedDataApi.saveFilm(modifiedFilm)
+        .then(fetchedFilm => setSavedFilms([...savedFilms, fetchedFilm]))
+        .catch(err => console.log)
+    }
+    else {
+      savedDataApi.unsaveFilm(foundFilm._id)
+        .then(() => {
+          setSavedFilms(savedFilms.filter(el => el._id !== foundFilm._id))
+          setSavedRequestedFilms(savedRequestedFilms.filter(el => el._id !== foundFilm._id))
+        })
+        .catch(err => console.log)
+    }
+  }
+
+  useEffect(() => {
+    setSavedRequestedFilms(savedFilms)
+  }, [savedRequestedFilms, savedFilms])
 
   function checkToken() {
     const jwt = localStorage.getItem('jwt');
@@ -88,14 +128,16 @@ function App() {
     checkToken();
   }, [isLoggedIn])
 
+  function logout() {
+    localStorage.clear();
+    setIsLoggedIn(false);
+    navigate('/');
+  }
+
   function handleSignUp({ password, email, name }) {
     savedDataApi.register({ password, email, name })
       .then(() => {
-        setIsLoggedIn(true)
-        setIsSuccess(true)
-        navigate('/movies')
-        setCurrentUser({ email, name })
-        setIsSuccess(null)
+        handleSignIn({ password, email })
       })
       .catch(err => {
         console.log(err);
@@ -107,8 +149,8 @@ function App() {
     savedDataApi.login({ password, email })
       .then((res) => {
         localStorage.setItem('jwt', res.token);
-        setIsLoggedIn(true);
         setIsSuccess(true)
+        setIsLoggedIn(true);
         navigate('/movies', { replace: true });
         setIsSuccess(null)
       })
@@ -160,17 +202,20 @@ function App() {
               currentUser={currentUser}
               onEdit={onEdit}
               isEditMode={isEditMode}
+              logout={logout}
             />
           } />
           <Route path='/movies' element={
             <ProtectedRoute
               element={Movies}
               handleSaveFilm={handleSaveFilm}
+              savedFilms={savedFilms}
               isLoading={isLoading}
               onRequest={handleRequest}
               requestedFilms={requestedFilms}
               isLoggedIn={isLoggedIn}
-              apiStatus={apiStatus}
+              films={films}
+              isSuccess={isSuccess}
             />
           }
           />
@@ -178,6 +223,10 @@ function App() {
             <ProtectedRoute
               element={SavedMovies}
               isLoggedIn={isLoggedIn}
+              savedFilms={savedFilms}
+              handleSaveFilm={handleSaveFilm}
+              savedRequestedFilms={savedRequestedFilms}
+              handleSavedFilmsRequest={handleSavedFilmsRequest}
             />
           } />
           <Route path='*' element={<NotFound />} />

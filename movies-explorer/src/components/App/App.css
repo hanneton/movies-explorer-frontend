@@ -44,7 +44,7 @@
 }
 
 .auth-form input:invalid {
-  outline: 2px double #EE3465;
+  /* outline: 2px double #EE3465; */
   color: #EE3465;
 }
 
@@ -55,22 +55,15 @@
   line-height: 12px;
   margin-bottom: 5px;
   color: #EE3465;
-  height: 24px;
+  height: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap
 }
 
 .auth-inform-message_positive {
   color: #3DDC84;
 }
-
-/* .auth-inform-message_type_sucesss {
-  visibility: visible;
-  color: #3DDC84;
-}
-
-.auth-inform-message_type_fail {
-  visibility: visible;
-  color: #EE3465;
-} */
 
 .auth-label {
   display: block;

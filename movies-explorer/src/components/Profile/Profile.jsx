@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Header from '../Header/Header';
 import './Profile.css'
 import useFormWithValidation from '../hooks/useFormWithValidation';
-import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 function Profile(props) {
     const {
@@ -22,15 +22,16 @@ function Profile(props) {
         initialIsValid: false,
     })
 
+
     function handleSubmit(e) {
         e.preventDefault();
-        console.log(values);
+        console.log(values)
         props.handleUpdateUser(values);
     }
 
     return (
         <>
-            <Header />
+            <Header isLoggedIn={props.isLoggedIn} />
             <main className="profile page__profile">
                 <h1 className='profile__heading'>Привет, {props.currentUser.name}!</h1>
                 <form onSubmit={(e) => handleSubmit(e)} className='profile__form' id="profile__form" name="profile__form">
@@ -51,7 +52,8 @@ function Profile(props) {
                         <span>E-mail</span>
                         <input className='profile__input'
                             onChange={handleChange}
-                            type="email"
+                            type="text"
+                            pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                             placeholder='Ваша почта'
                             defaultValue={values.email}
                             required
@@ -64,13 +66,22 @@ function Profile(props) {
                         ? (
                             <div className='profile__btns-group_edit'>
                                 <span className='profile__update-error'>При обновлении профиля произошла ошибка.</span>
-                                <button form='profile__form' className='auth-btn'>Сохранить</button>
+                                <button
+                                    form='profile__form'
+                                    className='auth-btn'
+                                    disabled={
+                                        isValid
+                                            && ((props.currentUser.name !== values.name)
+                                                || (props.currentUser.email !== values.email))
+                                            ? null
+                                            : true}
+                                >Сохранить</button>
                             </div>
                         )
                         : (
                             <div className="profile__btns-group">
                                 <button onClick={props.onEdit} className='profile__btn'>Редактировать</button>
-                                <a className='profile__btn profile__btn_exit' href='./signin'>Выйти из аккаунта</a>
+                                <Link to="/" onClick={props.logout} className='profile__btn profile__btn_exit'>Выйти из аккаунта</Link>
                             </div>
                         )
                 }
