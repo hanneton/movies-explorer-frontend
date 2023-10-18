@@ -17,7 +17,9 @@ function MoviesCardList(props) {
                 : [5, 1]
         return { perFirstChunk, perRevealedChunk }
     }
-
+    // useEffect(() => {
+    //     setDisplayedFilms(props.filteredRequestedFilms)
+    // }, [])
     useEffect(() => {
         let { perFirstChunk } = calcChunkSize();
         let firstChunk = props.filteredRequestedFilms.slice(0, perFirstChunk);

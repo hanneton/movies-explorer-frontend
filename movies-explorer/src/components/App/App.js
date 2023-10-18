@@ -14,6 +14,7 @@ import { savedDataApi } from '../../utils/MainApi'
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
 import { CurrentWidth } from '../../contexts/CurrentWidth'
 import { beatFilmsUrl } from '../../utils/MoviesApi'
+import { Navigate } from "react-router-dom";
 
 function App() {
   const [films, setFilms] = useState([])
@@ -31,6 +32,7 @@ function App() {
   const [windowWidth, setWindowWidth] = useState(0);
   const [isPending, setIsPending] = useState(false);
   const [isCheckedGlobal, setIsCheckedGlobal] = useState(false);
+  const [savedRequest, setSavedRequest] = useState('');
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -115,6 +117,7 @@ function App() {
   }
 
   function handleSavedFilmsRequest({ request }) {
+    setSavedRequest(request);
     setSavedRequestedFilms(filterFilmsList(request, savedFilms, isCheckedGlobal));
     setFilteredSavedRequestedFilms(filterFilmsList(request, savedFilms, isCheckedGlobal));
   }
@@ -231,19 +234,26 @@ function App() {
           }
           />
           <Route path='/signin' element={
-            <Login
-              handleSignIn={handleSignIn}
-              isSuccess={isSuccess}
-              setIsSuccess={setIsSuccess}
-              isPending={isPending}
-            />} />
+            isLoggedIn
+              ? <Navigate
+                to='/'
+              /> : <Login
+                handleSignIn={handleSignIn}
+                isSuccess={isSuccess}
+                setIsSuccess={setIsSuccess}
+                isPending={isPending}
+              />} />
           <Route path='/signup' element={
-            <Register
-              handleSignUp={handleSignUp}
-              isSuccess={isSuccess}
-              setIsSuccess={setIsSuccess}
-              isPending={isPending}
-            />} />
+            isLoggedIn
+              ? <Navigate
+                to='/'
+              />
+              : <Register
+                handleSignUp={handleSignUp}
+                isSuccess={isSuccess}
+                setIsSuccess={setIsSuccess}
+                isPending={isPending}
+              />} />
           <Route path='/profile' element={
             <ProtectedRoute
               handleUpdateUser={handleUpdateUser}
@@ -265,6 +275,7 @@ function App() {
               savedFilms={savedFilms}
               isLoading={isLoading}
               onRequest={handleRequest}
+              setRequestedFilms={setRequestedFilms}
               filteredRequestedFilms={filteredRequestedFilms}
               setFilteredRequestedFilms={setFilteredRequestedFilms}
               isLoggedIn={isLoggedIn}
@@ -286,7 +297,9 @@ function App() {
               setSavedRequestedFilms={setSavedRequestedFilms}
               filteredSavedRequestedFilms={filteredSavedRequestedFilms}
               setFilteredSavedRequestedFilms={setFilteredSavedRequestedFilms}
+              isCheckedGlobal={isCheckedGlobal}
               setIsCheckedGlobal={setIsCheckedGlobal}
+              savedRequest={savedRequest}
             />
           } />
           <Route path='/*' element={<NotFound />} />

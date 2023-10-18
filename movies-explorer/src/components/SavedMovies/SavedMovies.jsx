@@ -31,6 +31,12 @@ function SavedMovies(props) {
                                 handleSaveFilm={props.handleSaveFilm}
                             />)
                     }
+                    {props.filteredSavedRequestedFilms.length === 0
+                        && props.savedRequest
+                        && <p className="movies__result">Ничего не найдено</p>}
+                    {props.isCheckedGlobal
+                        && !props.savedRequest
+                        && <p className="movies__result">Ничего не найдено</p>}
                 </section>
             </main>
             <Footer />

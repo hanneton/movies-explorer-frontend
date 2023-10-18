@@ -15,6 +15,7 @@ function Movies(props) {
                     isShort={props.isShort}
                     setIsCheckedGlobal={props.setIsCheckedGlobal}
                     setFilteredRequestedFilms={props.setFilteredRequestedFilms}
+                    setRequestedFilms={props.setRequestedFilms}
                 />
                 {props.isLoading && <Preloader />}
                 < MoviesCardList
@@ -30,6 +31,9 @@ function Movies(props) {
                         Возможно, проблема с соединением или сервер недоступен.
                         Подождите немного и попробуйте ещё раз</p>}
 
+                {props.filteredRequestedFilms.length === 0
+                    && <p className="movies__result">Ничего не найдено</p>}
+
                 {localStorage.getItem('displayedFilms') === null
                     && < MoviesCardList
                         handleSaveFilm={props.handleSaveFilm}
@@ -38,9 +42,6 @@ function Movies(props) {
                         savedFilms={props.savedFilms}
                         isCheckedGlobal={props.isCheckedGlobal}
                     />}
-
-                {/* {props.filteredRequestedFilms.length === 0
-                    && <p className="movies__result">Ничего не найдено</p>} */}
             </main>
             <Footer />
             <p className="movies__result"></p>

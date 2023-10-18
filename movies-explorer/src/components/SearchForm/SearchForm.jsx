@@ -23,6 +23,15 @@ function SearchForm(props) {
                     setIsEmpty(false))
         }
 
+    const handleRequestChange = location.pathname === '/movies'
+        ? (e) => {
+            localStorage.setItem('request', e.target.value);
+            setRequest(e.target.value);
+        }
+        : (e) => {
+            setRequest(e.target.value)
+        }
+
     useEffect(() => {
         if (location.pathname === '/movies') {
             if (localStorage.getItem('request') === null) {
@@ -39,9 +48,10 @@ function SearchForm(props) {
             setRequest(localStorage.getItem('request'));
             setIsChecked(JSON.parse(localStorage.getItem('isChecked')));
             props.setFilteredRequestedFilms(JSON.parse(localStorage.getItem('displayedFilms')))
+            props.setRequestedFilms(JSON.parse(localStorage.getItem('displayedFilms')))
+
         }
     }, []);
-
 
     return (
         <section className='movies-req content__movies-req'>
@@ -50,10 +60,7 @@ function SearchForm(props) {
                     className="movies-req__input"
                     type="text"
                     placeholder="Фильм"
-                    onChange={(e) => {
-                        localStorage.setItem('request', e.target.value);
-                        setRequest(e.target.value)
-                    }}
+                    onChange={handleRequestChange}
                     value={request}
                     name="request"
                 />
