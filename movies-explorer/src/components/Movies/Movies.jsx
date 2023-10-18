@@ -4,7 +4,6 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import './Movies.css'
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import { useEffect } from "react";
 
 function Movies(props) {
     return (
@@ -14,26 +13,37 @@ function Movies(props) {
                 <SearchForm
                     onRequest={props.onRequest}
                     isShort={props.isShort}
+                    setIsCheckedGlobal={props.setIsCheckedGlobal}
+                    setFilteredRequestedFilms={props.setFilteredRequestedFilms}
+                />
+                {props.isLoading && <Preloader />}
+                < MoviesCardList
+                    handleSaveFilm={props.handleSaveFilm}
+                    filteredRequestedFilms={props.filteredRequestedFilms}
+                    setFilteredRequestedFilms={props.setFilteredRequestedFilms}
+                    savedFilms={props.savedFilms}
+                    isCheckedGlobal={props.isCheckedGlobal}
                 />
 
-                {props.isLoading
-                    ? <Preloader />
-                    : props.films.length === 0
-                        ? <p className="movies__result"></p>
-                        : props.requestedFilms.length === 0
-                            ? <p className="movies__result">Ничего не найдено</p>
-                            : props.isSuccess === false
-                                ? <p>Во время запроса произошла ошибка.
-                                    Возможно, проблема с соединением или сервер недоступен.
-                                    Подождите немного и попробуйте ещё раз</p>
-                                : <MoviesCardList
-                                    handleSaveFilm={props.handleSaveFilm}
-                                    requestedFilms={props.requestedFilms}
-                                    savedFilms={props.savedFilms}
-                                />}
+                {props.isFound === false
+                    && <p>Во время запроса произошла ошибка.
+                        Возможно, проблема с соединением или сервер недоступен.
+                        Подождите немного и попробуйте ещё раз</p>}
 
+                {localStorage.getItem('displayedFilms') === null
+                    && < MoviesCardList
+                        handleSaveFilm={props.handleSaveFilm}
+                        filteredRequestedFilms={props.filteredRequestedFilms}
+                        setFilteredRequestedFilms={props.setFilteredRequestedFilms}
+                        savedFilms={props.savedFilms}
+                        isCheckedGlobal={props.isCheckedGlobal}
+                    />}
+
+                {/* {props.filteredRequestedFilms.length === 0
+                    && <p className="movies__result">Ничего не найдено</p>} */}
             </main>
             <Footer />
+            <p className="movies__result"></p>
         </>
     )
 }

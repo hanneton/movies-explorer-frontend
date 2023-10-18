@@ -3,6 +3,7 @@ import Header from '../Header/Header';
 import './Profile.css'
 import useFormWithValidation from '../hooks/useFormWithValidation';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
 function Profile(props) {
     const {
@@ -22,12 +23,15 @@ function Profile(props) {
         initialIsValid: false,
     })
 
+    useEffect(() => {
+        props.setIsSuccess(null);
+    }, [])
 
     function handleSubmit(e) {
         e.preventDefault();
-        console.log(values)
         props.handleUpdateUser(values);
     }
+
 
     return (
         <>
@@ -61,6 +65,13 @@ function Profile(props) {
                             disabled={!props.isEditMode ? true : null} />
                     </label>
                 </form>
+                <span className={`auth-inform-message ${props.isSuccess && 'auth-inform-message_positive'}`}>
+                    {((errors.password) || (props.isSuccess === null
+                        ? ''
+                        : props.isSuccess
+                            ? 'Данные изменены'
+                            : 'Что-то пошло не так'))}
+                </span>
                 {
                     props.isEditMode
                         ? (
@@ -70,9 +81,10 @@ function Profile(props) {
                                     form='profile__form'
                                     className='auth-btn'
                                     disabled={
-                                        isValid
+                                        (isValid
                                             && ((props.currentUser.name !== values.name)
-                                                || (props.currentUser.email !== values.email))
+                                                || (props.currentUser.email !== values.email)))
+                                            && !props.isPending
                                             ? null
                                             : true}
                                 >Сохранить</button>

@@ -1,5 +1,5 @@
 import './App.css'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Main from '../Main/Main'
 import Movies from '../Movies/Movies'
 import SavedMovies from '../SavedMovies/SavedMovies'
@@ -18,17 +18,22 @@ import { beatFilmsUrl } from '../../utils/MoviesApi'
 function App() {
   const [films, setFilms] = useState([])
   const [requestedFilms, setRequestedFilms] = useState([]);
+  const [filteredRequestedFilms, setFilteredRequestedFilms] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [savedFilms, setSavedFilms] = useState([]);
   const [savedRequestedFilms, setSavedRequestedFilms] = useState([]);
+  const [filteredSavedRequestedFilms, setFilteredSavedRequestedFilms] = useState([]);
   const [isSuccess, setIsSuccess] = useState(null);
+  const [isFound, setIsFound] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false)
   const [currentUser, setCurrentUser] = useState({})
   const [windowWidth, setWindowWidth] = useState(0);
+  const [isPending, setIsPending] = useState(false);
+  const [isCheckedGlobal, setIsCheckedGlobal] = useState(false);
 
   const navigate = useNavigate();
-
+  const location = useLocation();
   let resizeWindow = () => {
     setWindowWidth(window.innerWidth);
   };
@@ -44,43 +49,74 @@ function App() {
       savedDataApi.getSavedFilms()
         .then(savedFilms => {
           setSavedFilms(savedFilms)
+          setSavedRequestedFilms(savedFilms)
+          setFilteredSavedRequestedFilms(savedFilms)
         })
         .catch(err => console.log)
     }
   }, [isLoggedIn])
 
-  function filterFilmsList(request, films, isChecked) {
-    return films.filter((el) => {
-      return isChecked
-        ? ((el.nameRU.toLowerCase().includes(request.toLowerCase()) || el.nameEN.toLowerCase().includes(request.toLowerCase())) && el.duration < 40)
-        : (el.nameRU.toLowerCase().includes(request.toLowerCase()) || el.nameEN.toLowerCase().includes(request.toLowerCase()))
-    }
-    )
+  useEffect(() => {
+    isCheckedGlobal
+      ? setFilteredRequestedFilms(filterByDuration(requestedFilms))
+      : setFilteredRequestedFilms(requestedFilms)
+  }, [isCheckedGlobal])
+
+  useEffect(() => {
+    isCheckedGlobal
+      ? setFilteredSavedRequestedFilms(filterByDuration(savedRequestedFilms))
+      : setFilteredSavedRequestedFilms(savedRequestedFilms)
+  }, [isCheckedGlobal])
+
+
+  function filterByDuration(films) {
+    return films.filter(el => el.duration < 40)
   }
 
-  function handleRequest({ request, isChecked }) {
+  function filterByRequest(req, films) {
+    return films.filter((el) => {
+      return ((el.nameRU.toLowerCase().includes(req.toLowerCase())
+        || el.nameEN.toLowerCase().includes(req.toLowerCase())))
+    })
+  }
+
+  function filterById(id, films) {
+    return films.filter(el => el._id !== id);
+  }
+
+  function filterFilmsList(request, films) {
+    return isCheckedGlobal
+      ? filterByDuration(filterByRequest(request, films))
+      : filterByRequest(request, films)
+  }
+
+  function handleRequest({ request }) {
     setIsLoading(true);
     if (films.length === 0) {
       moviesApi.getFilms()
         .then(films => {
           setFilms(films);
-          setRequestedFilms(filterFilmsList(request, films, isChecked))
+          let filteredFilms = filterFilmsList(request, films);
+          setRequestedFilms(filteredFilms);
+          setFilteredRequestedFilms(filteredFilms);
           setIsLoading(false)
-          setIsSuccess(true);
+          setIsFound(true);
         })
         .catch(err => {
           console.log(err)
-          setIsSuccess(false)
+          setIsFound(false)
         })
     }
     else {
-      setRequestedFilms(filterFilmsList(request, films, isChecked));
+      setRequestedFilms(filterFilmsList(request, films));
+      setFilteredRequestedFilms(filterFilmsList(request, films));
       setIsLoading(false)
     }
   }
 
-  function handleSavedFilmsRequest({ request, isChecked }) {
-    setSavedRequestedFilms(filterFilmsList(request, savedFilms, isChecked))
+  function handleSavedFilmsRequest({ request }) {
+    setSavedRequestedFilms(filterFilmsList(request, savedFilms, isCheckedGlobal));
+    setFilteredSavedRequestedFilms(filterFilmsList(request, savedFilms, isCheckedGlobal));
   }
 
   function handleSaveFilm(foundFilm, newFilm) {
@@ -100,16 +136,13 @@ function App() {
     else {
       savedDataApi.unsaveFilm(foundFilm._id)
         .then(() => {
-          setSavedFilms(savedFilms.filter(el => el._id !== foundFilm._id))
-          setSavedRequestedFilms(savedRequestedFilms.filter(el => el._id !== foundFilm._id))
+          setSavedFilms(filterById(foundFilm._id, savedFilms))
+          setSavedRequestedFilms(filterById(foundFilm._id, savedRequestedFilms))
+          setFilteredSavedRequestedFilms(filterById(foundFilm._id, filteredSavedRequestedFilms))
         })
         .catch(err => console.log)
     }
   }
-
-  useEffect(() => {
-    setSavedRequestedFilms(savedFilms)
-  }, [savedRequestedFilms, savedFilms])
 
   function checkToken() {
     const jwt = localStorage.getItem('jwt');
@@ -118,7 +151,7 @@ function App() {
         .then((data) => {
           setCurrentUser(data);
           setIsLoggedIn(true);
-          navigate('/movies');
+          navigate(location.pathname);
         })
         .catch(err => console.log(err));
     }
@@ -128,6 +161,8 @@ function App() {
     checkToken();
   }, [isLoggedIn])
 
+
+
   function logout() {
     localStorage.clear();
     setIsLoggedIn(false);
@@ -135,6 +170,7 @@ function App() {
   }
 
   function handleSignUp({ password, email, name }) {
+    setIsPending(true);
     savedDataApi.register({ password, email, name })
       .then(() => {
         handleSignIn({ password, email })
@@ -143,9 +179,11 @@ function App() {
         console.log(err);
         setIsSuccess(false)
       })
+      .finally(() => setIsPending(false))
   }
 
   function handleSignIn({ password, email }) {
+    setIsPending(true);
     savedDataApi.login({ password, email })
       .then((res) => {
         localStorage.setItem('jwt', res.token);
@@ -158,15 +196,23 @@ function App() {
         console.log(err)
         setIsSuccess(false)
       })
+      .finally(() => setIsPending(false))
   }
 
   function handleUpdateUser({ name, email }) {
+    setIsPending(true);
     savedDataApi.editProfileInfo({ name, email })
       .then((updatedUser) => {
-        console.log(updatedUser)
         setCurrentUser(updatedUser);
         setIsEditMode(false);
+        setIsSuccess(true);
+
       })
+      .catch(err => {
+        console.log(err);
+        setIsSuccess(false);
+      })
+      .finally(() => setIsPending(false))
   }
 
   function onEdit() {
@@ -188,11 +234,15 @@ function App() {
             <Login
               handleSignIn={handleSignIn}
               isSuccess={isSuccess}
+              setIsSuccess={setIsSuccess}
+              isPending={isPending}
             />} />
           <Route path='/signup' element={
             <Register
               handleSignUp={handleSignUp}
               isSuccess={isSuccess}
+              setIsSuccess={setIsSuccess}
+              isPending={isPending}
             />} />
           <Route path='/profile' element={
             <ProtectedRoute
@@ -203,6 +253,9 @@ function App() {
               onEdit={onEdit}
               isEditMode={isEditMode}
               logout={logout}
+              isSuccess={isSuccess}
+              setIsSuccess={setIsSuccess}
+              isPending={isPending}
             />
           } />
           <Route path='/movies' element={
@@ -212,10 +265,13 @@ function App() {
               savedFilms={savedFilms}
               isLoading={isLoading}
               onRequest={handleRequest}
-              requestedFilms={requestedFilms}
+              filteredRequestedFilms={filteredRequestedFilms}
+              setFilteredRequestedFilms={setFilteredRequestedFilms}
               isLoggedIn={isLoggedIn}
               films={films}
-              isSuccess={isSuccess}
+              isFound={isFound}
+              isCheckedGlobal={isCheckedGlobal}
+              setIsCheckedGlobal={setIsCheckedGlobal}
             />
           }
           />
@@ -227,9 +283,13 @@ function App() {
               handleSaveFilm={handleSaveFilm}
               savedRequestedFilms={savedRequestedFilms}
               handleSavedFilmsRequest={handleSavedFilmsRequest}
+              setSavedRequestedFilms={setSavedRequestedFilms}
+              filteredSavedRequestedFilms={filteredSavedRequestedFilms}
+              setFilteredSavedRequestedFilms={setFilteredSavedRequestedFilms}
+              setIsCheckedGlobal={setIsCheckedGlobal}
             />
           } />
-          <Route path='*' element={<NotFound />} />
+          <Route path='/*' element={<NotFound />} />
         </Routes>
       </div>
     </CurrentWidth.Provider>

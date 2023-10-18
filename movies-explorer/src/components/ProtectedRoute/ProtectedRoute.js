@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 // он также может взять неограниченное число пропсов и передать их новому компоненту
 function ProtectedRoute({ element: Component, ...props }) {
     return (
-        props.isLoggedIn ? <Component {...props} /> : <Navigate to="/signin" replace />
+        props.isLoggedIn ? <Component {...props} /> : <Navigate to="/" replace />
     )
 }
 

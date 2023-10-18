@@ -3,19 +3,29 @@ import SearchForm from "../SearchForm/SearchForm";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import MoviesCard from "../MoviesCard/MoviesCard";
+import { useEffect } from "react";
 
 
 function SavedMovies(props) {
+
+    useEffect(() => {
+        props.setFilteredSavedRequestedFilms(props.savedFilms);
+        props.setSavedRequestedFilms(props.savedFilms);
+    }, [])
+
     return (
         <>
             <Header isLoggedIn={props.isLoggedIn} />
             <main className="saved-movies page__saved-movies">
-                <SearchForm handleSavedFilmsRequest={props.handleSavedFilmsRequest} />
+                <SearchForm
+                    handleSavedFilmsRequest={props.handleSavedFilmsRequest}
+                    setIsCheckedGlobal={props.setIsCheckedGlobal}
+                />
                 <section className="cardlist content__cardlist">
                     {
-                        props.savedRequestedFilms.map((film, index) =>
+                        props.filteredSavedRequestedFilms.map((film, index) =>
                             <MoviesCard
-                                key={index}
+                                key={film.movieId}
                                 film={film}
                                 savedFilms={props.savedFilms}
                                 handleSaveFilm={props.handleSaveFilm}

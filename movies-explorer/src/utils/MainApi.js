@@ -40,7 +40,6 @@ class SavedDataApi {
     }
 
     register({ password, email, name }) {
-        console.log(password, email, name)
         return fetch(`${this.url}/signup`, {
             method: 'POST',
             headers: {

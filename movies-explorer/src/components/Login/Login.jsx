@@ -2,7 +2,7 @@ import './Login.css'
 import logo from '../../images/logo.svg'
 import useFormWithValidation from '../hooks/useFormWithValidation';
 import isEmail from 'validator/lib/isEmail';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 function Login(props) {
@@ -13,11 +13,9 @@ function Login(props) {
         handleChange
     } = useFormWithValidation({
         initialValues: {
-            email: '',
             password: '',
         },
         initialErrors: {
-            email: '',
             password: '',
         },
         initialIsValid: false,
@@ -25,14 +23,17 @@ function Login(props) {
 
     const [email, setEmail] = useState('')
     const [emailError, setEmailError] = useState('')
+    const [isEmailValid, setIsEmailValid] = useState(false);
 
     const handleEmailChange = (event) => {
         const value = event.target.value;
         setEmail(value);
         if (!isEmail(value)) {
+            setIsEmailValid(false)
             setEmailError("Некорректный email");
         } else {
             setEmailError("");
+            setIsEmailValid(true)
         }
     };
 
@@ -40,6 +41,8 @@ function Login(props) {
         e.preventDefault();
         props.handleSignIn({ ...values, email });
     }
+
+    useEffect(() => { props.setIsSuccess(null) }, [])
 
     return (
         <main className='auth page__auth'>
@@ -61,7 +64,8 @@ function Login(props) {
                         type="text"
                         placeholder='pochta@yandex.ru'
                         required
-                        onChange={handleChange}
+                        value={email}
+                        onChange={handleEmailChange}
                         name="email"
                     />
                 </label>
@@ -84,7 +88,7 @@ function Login(props) {
                             : 'Что-то пошло не так'))}
                 </span>
             </form>
-            <button form="auth-form-signin" className='auth-btn' disabled={isValid ? null : true}>Войти</button>
+            <button form="auth-form-signin" className='auth-btn' disabled={!(isValid && isEmailValid) || props.isPending ? true : null}>Войти</button>
             <p className='auth-caption'>Ещё не зарегистрированы?<Link className='auth-link' to='/signup'> Регистрация</Link></p>
         </main>
     )

@@ -4,6 +4,7 @@ import useFormWithValidation from '../hooks/useFormWithValidation';
 import isEmail from 'validator/lib/isEmail';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
 function Register(props) {
     const {
@@ -25,14 +26,17 @@ function Register(props) {
 
     const [email, setEmail] = useState('')
     const [emailError, setEmailError] = useState('')
+    const [isEmailValid, setIsEmailValid] = useState(false);
 
     const handleEmailChange = (event) => {
         const value = event.target.value;
         setEmail(value);
         if (!isEmail(value)) {
+            setIsEmailValid(false)
             setEmailError("Некорректный email");
         } else {
             setEmailError("");
+            setIsEmailValid(true)
         }
     }
 
@@ -42,6 +46,7 @@ function Register(props) {
         props.handleSignUp({ ...values, email });
     }
 
+    useEffect(() => { props.setIsSuccess(null) }, [])
     return (
         <main className='auth page__auth'>
             <a href='./'>
@@ -97,7 +102,7 @@ function Register(props) {
                             : 'Что-то пошло не так'))}
                 </span>
             </form>
-            <button form="auth-form-signup" className='auth-btn' disabled={isValid ? null : true}>Зарегистрироваться</button>
+            <button form="auth-form-signup" className='auth-btn' disabled={!(isValid && isEmailValid) || props.isPending ? true : null}>Зарегистрироваться</button>
             <p className='auth-caption'>Уже зарегистрированы?<Link className='auth-link' to='/signin'> Войти</Link></p>
         </main>
     )

@@ -12,14 +12,14 @@ function SearchForm(props) {
             e.preventDefault()
             return !request
                 ? setIsEmpty(true)
-                : (props.onRequest({ request, isChecked }),
+                : (props.onRequest({ request }),
                     setIsEmpty(false));
         }
         : (e) => {
             e.preventDefault();
             return !request
                 ? setIsEmpty(true)
-                : (props.handleSavedFilmsRequest({ request, isChecked }),
+                : (props.handleSavedFilmsRequest({ request }),
                     setIsEmpty(false))
         }
 
@@ -31,10 +31,17 @@ function SearchForm(props) {
             if (localStorage.getItem('isChecked') === null) {
                 localStorage.setItem('isChecked', false)
             }
+
+            if (localStorage.getItem('displayedFilms') === null) {
+                localStorage.setItem('displayedFilms', JSON.stringify([]));
+            }
+
             setRequest(localStorage.getItem('request'));
             setIsChecked(JSON.parse(localStorage.getItem('isChecked')));
+            props.setFilteredRequestedFilms(JSON.parse(localStorage.getItem('displayedFilms')))
         }
     }, []);
+
 
     return (
         <section className='movies-req content__movies-req'>
@@ -65,6 +72,7 @@ function SearchForm(props) {
                         checked={isChecked}
                         onClick={(e) => {
                             setIsChecked(e.target.checked);
+                            props.setIsCheckedGlobal(e.target.checked)
                             localStorage.setItem('isChecked', e.target.checked);
                         }}
                         name='isChecked'
