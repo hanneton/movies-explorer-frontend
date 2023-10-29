@@ -1,0 +1,136 @@
+.card {
+    width: 100%;
+    margin: 0;
+    position: relative;
+}
+
+.card__pic {
+    height: 201px;
+    width: 100%;
+    display: block;
+    border-radius: 6px;
+    object-fit: fill;
+    background-color: transparent;
+}
+
+.card__link {
+    text-decoration: none;
+}
+
+.card__caption {
+    display: flex;
+    justify-content: space-between;
+    align-items: top;
+    margin: 14px 14px 0;
+    flex-wrap: nowrap;
+}
+
+.card__duration {
+    box-sizing: border-box;
+    margin: 0;
+    max-width: 52px;
+    width: 100%;
+    height: 18px;
+    text-align: center;
+    padding: 3px 0;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 10px;
+    border-radius: 3px;
+    color: #8B8B8B;
+    background-color: #2F2F2F;
+}
+
+.card__title {
+    max-width: 250px;
+    width: 100%;
+    overflow-wrap: break-word;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin: 0;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 15.73px;
+}
+
+.card__btn {
+    visibility: hidden;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    border: 0;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.card__btn_type_save {
+    max-width: 72px;
+    width: 100%;
+    background-color: #313131;
+    padding: 6px 7px;
+    font-family: "Inter", "Arial", sans-serif;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 9px;
+    border-radius: 30px;
+    color: #fff;
+}
+
+.card__btn_type_save:after {
+    content: 'Сохранить'
+}
+
+.card:hover>.card__btn {
+    visibility: visible;
+}
+
+.card__btn_type_checked {
+    width: 21px;
+    height: 21px;
+    background-color: #EE3465;
+    background-image: url(../../images/tick.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 8px 4.5px;
+    border-radius: 50%;
+}
+
+.card__btn_type_delete {
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    background-color: #313131;
+    background-image: url(../../images/btn-close.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+@media screen and (max-width: 900px) {
+    .card {
+        max-width: 339px;
+    }
+
+    .card__pic {
+        height: 190px;
+    }
+
+    .card__caption {
+        margin: 25px 0 0;
+    }
+}
+
+@media screen and (max-width:600px) {
+    .card__pic {
+        height: 168px;
+    }
+
+    .card__caption {
+        margin: 16px 0 0;
+    }
+
+    .card__title {
+        font-size: 12px;
+        line-height: 14.52px;
+    }
+}
