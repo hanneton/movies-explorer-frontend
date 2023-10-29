@@ -94,7 +94,10 @@
 
     .about-me__container {
         flex-direction: column-reverse;
-        margin-top: 60px;
+        align-items: center;
+        max-width: 292px;
+        width: 100%;
+        margin: 60px auto 0;
     }
 
     .about-me__personal-photo {

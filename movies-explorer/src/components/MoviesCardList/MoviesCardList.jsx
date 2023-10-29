@@ -4,31 +4,33 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { useContext } from 'react';
 import { CurrentWidth } from '../../contexts/CurrentWidth';
+import {
+    MAIN_CHUNK_MAX, MAIN_CHUNK_MEDIUM, MAIN_CHUNK_MIN,
+    EXTRA_CHUNK_MAX, EXTRA_CHUNK_MEDIUM, EXTRA_CHUNK_MIN
+} from '../../constants/constants';
 
 
 function MoviesCardList(props) {
     const currentWidth = useContext(CurrentWidth);
     const [displayedFilms, setDisplayedFilms] = useState([]);
     function calcChunkSize() {
-        let [perFirstChunk, perRevealedChunk] = currentWidth >= 1280
-            ? [12, 3]
+        let [perMainChunk, perExtraChunk] = currentWidth >= 1280
+            ? [MAIN_CHUNK_MAX, EXTRA_CHUNK_MAX]
             : currentWidth >= 768
-                ? [8, 2]
-                : [5, 1]
-        return { perFirstChunk, perRevealedChunk }
+                ? [MAIN_CHUNK_MEDIUM, EXTRA_CHUNK_MEDIUM]
+                : [MAIN_CHUNK_MIN, EXTRA_CHUNK_MIN]
+        return { perMainChunk, perExtraChunk }
     }
-    // useEffect(() => {
-    //     setDisplayedFilms(props.filteredRequestedFilms)
-    // }, [])
+
     useEffect(() => {
-        let { perFirstChunk } = calcChunkSize();
-        let firstChunk = props.filteredRequestedFilms.slice(0, perFirstChunk);
+        let { perMainChunk } = calcChunkSize();
+        let firstChunk = props.filteredRequestedFilms.slice(0, perMainChunk);
         setDisplayedFilms(firstChunk)
         localStorage.setItem('displayedFilms', JSON.stringify(props.filteredRequestedFilms))
     }, [currentWidth, props.filteredRequestedFilms, props.isCheckedGlobal])
 
     function handleClick() {
-        const revealedCards = props.filteredRequestedFilms.slice(displayedFilms.length, displayedFilms.length + calcChunkSize().perRevealedChunk);
+        const revealedCards = props.filteredRequestedFilms.slice(displayedFilms.length, displayedFilms.length + calcChunkSize().perExtraChunk);
         setDisplayedFilms([...displayedFilms, ...revealedCards])
     }
 
@@ -40,7 +42,7 @@ function MoviesCardList(props) {
                         key={film.id}
                         film={film}
                         savedFilms={props.savedFilms}
-                        handleSaveFilm={props.handleSaveFilm}
+                        handleCardClick={props.handleCardClick}
                     />
                 })}
             </section>

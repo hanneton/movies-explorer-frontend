@@ -12,14 +12,14 @@ function Movies(props) {
             <main className="movies page__movies">
                 <SearchForm
                     onRequest={props.onRequest}
-                    isShort={props.isShort}
+                    isCheckedGlobal={props.isCheckedGlobal}
                     setIsCheckedGlobal={props.setIsCheckedGlobal}
                     setFilteredRequestedFilms={props.setFilteredRequestedFilms}
                     setRequestedFilms={props.setRequestedFilms}
                 />
                 {props.isLoading && <Preloader />}
                 < MoviesCardList
-                    handleSaveFilm={props.handleSaveFilm}
+                    handleCardClick={props.handleCardClick}
                     filteredRequestedFilms={props.filteredRequestedFilms}
                     setFilteredRequestedFilms={props.setFilteredRequestedFilms}
                     savedFilms={props.savedFilms}
@@ -36,7 +36,7 @@ function Movies(props) {
 
                 {localStorage.getItem('displayedFilms') === null
                     && < MoviesCardList
-                        handleSaveFilm={props.handleSaveFilm}
+                        handleCardClick={props.handleCardClick}
                         filteredRequestedFilms={props.filteredRequestedFilms}
                         setFilteredRequestedFilms={props.setFilteredRequestedFilms}
                         savedFilms={props.savedFilms}

@@ -30,7 +30,7 @@ function MoviesCard(props) {
                         let foundFilm = props.savedFilms.find((el) => {
                             return props.film.id === el.movieId;
                         })
-                        props.handleSaveFilm(foundFilm, props.film)
+                        props.handleCardClick(foundFilm, props.film)
                     }}
                     className={`card__btn ${props.savedFilms.some((el) => {
                         return props.film.id === el.movieId;
@@ -38,7 +38,7 @@ function MoviesCard(props) {
                     type='button'>
                 </button>)
                 : (<button
-                    onClick={() => props.handleSaveFilm(props.film)}
+                    onClick={() => props.handleCardClick(props.film)}
                     className='card__btn card__btn_type_delete'>
                 </button>)}
         </figure >

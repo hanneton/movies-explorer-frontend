@@ -5,7 +5,6 @@ import './SearchForm.css'
 function SearchForm(props) {
     const [request, setRequest] = useState('')
     const [isEmpty, setIsEmpty] = useState(false)
-    const [isChecked, setIsChecked] = useState(false)
     const location = useLocation();
     const handleRequest = location.pathname === '/movies'
         ? (e) => {
@@ -44,12 +43,10 @@ function SearchForm(props) {
             if (localStorage.getItem('displayedFilms') === null) {
                 localStorage.setItem('displayedFilms', JSON.stringify([]));
             }
-
             setRequest(localStorage.getItem('request'));
-            setIsChecked(JSON.parse(localStorage.getItem('isChecked')));
+            props.setIsCheckedGlobal(JSON.parse(localStorage.getItem('isChecked')))
             props.setFilteredRequestedFilms(JSON.parse(localStorage.getItem('displayedFilms')))
             props.setRequestedFilms(JSON.parse(localStorage.getItem('displayedFilms')))
-
         }
     }, []);
 
@@ -76,9 +73,8 @@ function SearchForm(props) {
                         id='movies-req__checkbox'
                         type='checkbox'
                         className="movies-req__checkbox"
-                        checked={isChecked}
+                        checked={props.isCheckedGlobal}
                         onClick={(e) => {
-                            setIsChecked(e.target.checked);
                             props.setIsCheckedGlobal(e.target.checked)
                             localStorage.setItem('isChecked', e.target.checked);
                         }}

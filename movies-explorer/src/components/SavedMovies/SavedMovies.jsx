@@ -28,15 +28,15 @@ function SavedMovies(props) {
                                 key={film.movieId}
                                 film={film}
                                 savedFilms={props.savedFilms}
-                                handleSaveFilm={props.handleSaveFilm}
+                                handleCardClick={props.handleCardClick}
                             />)
                     }
-                    {props.filteredSavedRequestedFilms.length === 0
+                    {/* {props.filteredSavedRequestedFilms.length === 0
                         && props.savedRequest
                         && <p className="movies__result">Ничего не найдено</p>}
                     {props.isCheckedGlobal
                         && !props.savedRequest
-                        && <p className="movies__result">Ничего не найдено</p>}
+                        && <p className="movies__result">Ничего не найдено</p>} */}
                 </section>
             </main>
             <Footer />

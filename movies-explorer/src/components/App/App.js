@@ -17,6 +17,8 @@ import { beatFilmsUrl } from '../../utils/MoviesApi'
 import { Navigate } from "react-router-dom";
 
 function App() {
+  const [isCheckedGlobal, setIsCheckedGlobal] = useState(false);
+
   const [films, setFilms] = useState([])
   const [requestedFilms, setRequestedFilms] = useState([]);
   const [filteredRequestedFilms, setFilteredRequestedFilms] = useState([]);
@@ -31,14 +33,16 @@ function App() {
   const [currentUser, setCurrentUser] = useState({})
   const [windowWidth, setWindowWidth] = useState(0);
   const [isPending, setIsPending] = useState(false);
-  const [isCheckedGlobal, setIsCheckedGlobal] = useState(false);
   const [savedRequest, setSavedRequest] = useState('');
 
   const navigate = useNavigate();
   const location = useLocation();
+
   let resizeWindow = () => {
     setWindowWidth(window.innerWidth);
   };
+
+  /*==================INITIAL COMPONENTS EFFECTS======================*/
 
   useEffect(() => {
     resizeWindow();
@@ -46,7 +50,10 @@ function App() {
     return () => window.removeEventListener("resize", resizeWindow);
   }, []);
 
+  /*=================isLoggedIn EFFECTS==================*/
+
   useEffect(() => {
+    checkToken();
     if (isLoggedIn) {
       savedDataApi.getSavedFilms()
         .then(savedFilms => {
@@ -57,6 +64,8 @@ function App() {
         .catch(err => console.log)
     }
   }, [isLoggedIn])
+
+  /*=======================isCheckedGlobal EFFECTS=======================*/
 
   useEffect(() => {
     isCheckedGlobal
@@ -70,6 +79,7 @@ function App() {
       : setFilteredSavedRequestedFilms(savedRequestedFilms)
   }, [isCheckedGlobal])
 
+  /*===================FILTER FUNCTIONS======================= */
 
   function filterByDuration(films) {
     return films.filter(el => el.duration < 40)
@@ -91,6 +101,35 @@ function App() {
       ? filterByDuration(filterByRequest(request, films))
       : filterByRequest(request, films)
   }
+
+  /*===================HANDLE CARD FUNCTIONS======================= */
+
+  function handleCardClick(foundFilm, newFilm) {
+    if (!foundFilm) {
+      const modifiedFilm = modifyFilmObjStructure(newFilm);
+      handleSave(modifiedFilm);
+    }
+    else {
+      handleUnsave(foundFilm)
+    }
+  }
+
+  function handleSave(film) {
+    savedDataApi.saveFilm(film)
+      .then(fetchedFilm => setSavedFilms([...savedFilms, fetchedFilm]))
+      .catch(err => console.log)
+  }
+  function handleUnsave(film) {
+    savedDataApi.unsaveFilm(film._id)
+      .then(() => {
+        setSavedFilms(filterById(film._id, savedFilms))
+        setSavedRequestedFilms(filterById(film._id, savedRequestedFilms))
+        setFilteredSavedRequestedFilms(filterById(film._id, filteredSavedRequestedFilms))
+      })
+      .catch(err => console.log)
+  }
+
+  /*===========================REQUESTS===============================*/
 
   function handleRequest({ request }) {
     setIsLoading(true);
@@ -122,55 +161,7 @@ function App() {
     setFilteredSavedRequestedFilms(filterFilmsList(request, savedFilms, isCheckedGlobal));
   }
 
-  function handleSaveFilm(foundFilm, newFilm) {
-    if (!foundFilm) {
-      let modifiedFilm = {
-        ...newFilm,
-        owner: currentUser._id,
-        image: beatFilmsUrl + newFilm.image.url,
-        thumbnail: beatFilmsUrl + newFilm.image.formats.thumbnail.url,
-        movieId: newFilm.id
-      }
-
-      savedDataApi.saveFilm(modifiedFilm)
-        .then(fetchedFilm => setSavedFilms([...savedFilms, fetchedFilm]))
-        .catch(err => console.log)
-    }
-    else {
-      savedDataApi.unsaveFilm(foundFilm._id)
-        .then(() => {
-          setSavedFilms(filterById(foundFilm._id, savedFilms))
-          setSavedRequestedFilms(filterById(foundFilm._id, savedRequestedFilms))
-          setFilteredSavedRequestedFilms(filterById(foundFilm._id, filteredSavedRequestedFilms))
-        })
-        .catch(err => console.log)
-    }
-  }
-
-  function checkToken() {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-      savedDataApi.getPersonalData(jwt)
-        .then((data) => {
-          setCurrentUser(data);
-          setIsLoggedIn(true);
-          navigate(location.pathname);
-        })
-        .catch(err => console.log(err));
-    }
-  }
-
-  useEffect(() => {
-    checkToken();
-  }, [isLoggedIn])
-
-
-
-  function logout() {
-    localStorage.clear();
-    setIsLoggedIn(false);
-    navigate('/');
-  }
+  /*======================LOGIN/LOGOUT/REGISTRATION/USER-CREDENTIALS======================*/
 
   function handleSignUp({ password, email, name }) {
     setIsPending(true);
@@ -202,6 +193,25 @@ function App() {
       .finally(() => setIsPending(false))
   }
 
+  function logout() {
+    localStorage.clear();
+    setIsLoggedIn(false);
+    navigate('/');
+  }
+
+  function checkToken() {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      savedDataApi.getPersonalData(jwt)
+        .then((data) => {
+          setCurrentUser(data);
+          setIsLoggedIn(true);
+          navigate(location.pathname);
+        })
+        .catch(err => console.log(err));
+    }
+  }
+
   function handleUpdateUser({ name, email }) {
     setIsPending(true);
     savedDataApi.editProfileInfo({ name, email })
@@ -209,13 +219,22 @@ function App() {
         setCurrentUser(updatedUser);
         setIsEditMode(false);
         setIsSuccess(true);
-
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
         setIsSuccess(false);
       })
       .finally(() => setIsPending(false))
+  }
+  /*==============================================================*/
+
+  function modifyFilmObjStructure(film) {
+    return {
+      ...film,
+      owner: currentUser._id,
+      image: beatFilmsUrl + film.image.url,
+      thumbnail: beatFilmsUrl + film.image.formats.thumbnail.url,
+      movieId: film.id
+    }
   }
 
   function onEdit() {
@@ -271,7 +290,7 @@ function App() {
           <Route path='/movies' element={
             <ProtectedRoute
               element={Movies}
-              handleSaveFilm={handleSaveFilm}
+              handleCardClick={handleCardClick}
               savedFilms={savedFilms}
               isLoading={isLoading}
               onRequest={handleRequest}
@@ -279,7 +298,6 @@ function App() {
               filteredRequestedFilms={filteredRequestedFilms}
               setFilteredRequestedFilms={setFilteredRequestedFilms}
               isLoggedIn={isLoggedIn}
-              films={films}
               isFound={isFound}
               isCheckedGlobal={isCheckedGlobal}
               setIsCheckedGlobal={setIsCheckedGlobal}
@@ -291,7 +309,7 @@ function App() {
               element={SavedMovies}
               isLoggedIn={isLoggedIn}
               savedFilms={savedFilms}
-              handleSaveFilm={handleSaveFilm}
+              handleCardClick={handleCardClick}
               savedRequestedFilms={savedRequestedFilms}
               handleSavedFilmsRequest={handleSavedFilmsRequest}
               setSavedRequestedFilms={setSavedRequestedFilms}

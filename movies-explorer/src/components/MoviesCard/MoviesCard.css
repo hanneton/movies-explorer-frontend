@@ -9,6 +9,8 @@
     width: 100%;
     display: block;
     border-radius: 6px;
+    object-fit: fill;
+    background-color: transparent;
 }
 
 .card__link {
@@ -60,8 +62,6 @@
     cursor: pointer;
     z-index: 1;
 }
-
-
 
 .card__btn_type_save {
     max-width: 72px;
